@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tech Tip: CO2 Leak Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:transparent;font-family:'Open Sans',sans-serif;font-size:18px;color:#222;width:100%;margin:0;padding:0}
+.wrapper{padding:.75rem}
+.img-row{display:flex;gap:1.25rem;align-items:center}
+.img-row-left{flex:1;min-width:0}
+.img-row-right{flex-shrink:0;width:250px;max-width:250px;display:flex;align-items:center;justify-content:center}
+.img-row-right img{width:100%;max-width:250px;max-height:250px;object-fit:contain;border-radius:8px;display:block;opacity:0;transition:opacity .4s ease}
+.img-row-right img.loaded{opacity:1}
+@media(max-width:500px){.img-row{flex-direction:column}.img-row-right{width:100%;max-width:100%}.img-row-right img{max-width:100%;max-height:220px}}
+.tip-blue{background:#EBF3FC;border-left:3px solid #246EFF;border-radius:0 6px 6px 0;padding:10px 13px;font-size:16px;color:#555;line-height:1.5;display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.tip-blue .cb{flex-shrink:0;width:24px;height:24px;border-radius:5px;border:2px solid #246EFF;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;margin-top:1px}
+.tip-blue .cb svg{display:none}
+.tip-blue.chk .cb{background:#28A745;border-color:#28A745}
+.tip-blue.chk .cb svg{display:block}
+.tip-blue.chk .tip-body-text{color:#999}
+.tip-blue.chk .tip-label{color:#999}
+.tip-label{font-weight:600;color:#1a52cc;display:block;margin-bottom:3px;font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="img-row">
+    <div class="img-row-left">
+      <div class="tip-blue" id="tip" onclick="toggleTip()">
+        <div class="cb">
+          <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
+            <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="tip-label">🚨 Tech Tip</span>
+          <span class="tip-body-text">After tightening the nut, slowly turn on the CO2 tank to check for leaks. You should hear gas briefly enter the system; any continuous hissing indicates a leak. If a leak is detected, turn off the tank and tighten the nut further.</span>
+        </div>
+      </div>
+    </div>
+    <div class="img-row-right">
+      <img src="https://adrianadiaz-del.github.io/leakcheck/IMG_6374.gif" alt="CO2 tank leak check">
+    </div>
+  </div>
+</div>
+<script>
+function toggleTip(){
+  document.getElementById('tip').classList.toggle('chk');
+  sendHeight();
+}
+function sendHeight(){
+  window.parent.postMessage({frameHeight: document.documentElement.scrollHeight}, '*');
+}
+sendHeight();
+window.addEventListener('resize', sendHeight);
+document.querySelectorAll('.img-row-right img').forEach(img=>{
+  if(img.complete) img.classList.add('loaded');
+  else img.addEventListener('load',()=>img.classList.add('loaded'));
+});
+setTimeout(sendHeight, 1500);
+setTimeout(sendHeight, 3000);
+</script>
+</body>
+</html>
